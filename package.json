@@ -1,0 +1,40 @@
+{
+  "name": "code-reviewer",
+  "version": "0.0.1",
+  "description": "chrome code review plugin",
+  "main": "index.js",
+  "scripts": {
+    "dev": "./node_modules/.bin/webpack --config ./build/webpack.dev.conf.js --watch",
+    "build": "rm -r -f dist/ && rm -f index.zip && node ./build/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiguaxigua/code-reviewer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiguaxigua/code-reviewer/issues"
+  },
+  "homepage": "https://github.com/xiguaxigua/code-reviewer#readme",
+  "devDependencies": {
+    "adm-zip": "^0.4.7",
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-latest": "^6.24.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "css-loader": "^0.28.0",
+    "html-webpack-plugin": "^2.28.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "style-loader": "^0.16.1",
+    "webpack": "^2.3.3",
+    "webpack-merge": "^4.1.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "wilddog": "^2.5.4"
+  }
+}

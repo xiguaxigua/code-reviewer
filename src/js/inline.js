@@ -27,6 +27,7 @@ document.body.appendChild(box)
 
 
 document.addEventListener('mousemove', _throttle(sendPosigion, 1000))
+document.addEventListener('scroll', _throttle(sendScroll, 1000))
 
 ref.child('admin').set({
   id: id
@@ -38,12 +39,20 @@ ref.on("value", function(snapshot) {
       console.log('触发鼠标位置修改')
       box.style.left = val.mouse.left + 'px'
       box.style.top = val.mouse.top + 'px'
+
+      document.body.scrollTop = val.page && val.page.top
     }
 });
 
 function sendPosigion (event) {
-  ref.child('mouse').set({
-    left: event.pageX,
-    top: event.pageY
-  });
+  // ref.child('mouse').set({
+  //   left: event.pageX,
+  //   top: event.pageY
+  // });
+}
+function sendScroll (event) {
+  console.log(event)
+  ref.child('page').set({
+    top: document.body.scrollTop
+  })
 }

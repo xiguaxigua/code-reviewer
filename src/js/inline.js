@@ -56,3 +56,8 @@ function sendScroll (event) {
     top: document.body.scrollTop
   })
 }
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  console.log('监听修改')
+  console.log(changes, namespace)
+})

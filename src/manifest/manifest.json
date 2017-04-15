@@ -11,11 +11,12 @@
   "permissions": [
     "webRequest",
     "webRequestBlocking",
-    "*://*.github.com/"
+    "*://*.github.com/",
+    "storage"
   ],
   "content_scripts": [{
     "matches": ["https://github.com/*"],
-    "js": ["js/inject.js"],
+    "js": ["js/content.js"],
     "all_frames": true,
     "run_at": "document_start"
   }],

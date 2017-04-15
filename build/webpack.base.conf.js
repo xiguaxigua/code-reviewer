@@ -8,8 +8,7 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    inline: './src/js/inline.js',
-    inject: './src/js/inject.js',
+    content: './src/js/content.js',
     popup: './src/js/popup.js',
     background: './src/js/background.js'
   },
@@ -18,10 +17,17 @@ module.exports = {
     filename: 'js/[name].js'
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js', '.vue']
   },
   module: {
     rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          sourceMap: false
+        }
+      },
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -40,6 +46,22 @@ module.exports = {
           }, {
             loader: "less-loader"
           }]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'img/[name].[hash:7].[ext]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'font/[name].[hash:7].[ext]'
+        }
       }
     ]
   },

@@ -24,7 +24,7 @@ module.exports = merge(baseWebpackConfig, {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       },
-      chunks: ['popup']
+      chunks: ['popup', 'vendor']
     })
   ]
 })

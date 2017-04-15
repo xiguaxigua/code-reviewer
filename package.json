@@ -4,7 +4,7 @@
   "description": "chrome code review plugin",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/webpack --config ./build/webpack.dev.conf.js --watch --hide-modules",
+    "dev": "rm -r -f dist && webpack --config ./build/webpack.dev.conf.js --watch --hide-modules",
     "build": "rm -r -f dist/ && rm -f index.zip && node ./build/build.js"
   },
   "repository": {
@@ -30,11 +30,19 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "style-loader": "^0.16.1",
+    "vue-loader": "^13.0.2",
+    "vue-template-compiler": "^2.4.2",
     "webpack": "^2.3.3",
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
+    "babel-plugin-component": "^0.10.0",
+    "element-ui": "^1.4.0",
+    "file-loader": "^0.11.2",
     "lodash": "^4.17.4",
+    "url-loader": "^0.5.9",
+    "vue": "^2.4.2",
+    "vue-router": "^2.7.0",
     "wilddog": "^2.5.4"
   }
 }

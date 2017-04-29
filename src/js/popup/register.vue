@@ -9,25 +9,34 @@
 </template>
 
 <script>
+import { setStorage, getStorage, addListener } from '../utils'
+
 export default {
   name: 'register',
 
   data () {
     return {
-      id: ''
+      id: 'code-reviewer'
     }
   },
 
   methods: {
     confirm () {
-      chrome.storage.onChanged.addListener((changes, namespace) => {
-        console.log('监听修改')
-        console.log(changes, namespace)
+      getStorage('id').then(res => {
+        console.log('id', res)
       })
-      chrome.storage.sync.set({ 'id': this.id }, () => {
-        console.log('保存成功')
-      })
+      setStorage('id', this.id)
     }
+  },
+
+  created () {
+    addListener((changes, namespace) => {
+      console.log('监听修改')
+      console.log(changes, namespace)
+    })
+    getStorage('uid').then(res => {
+      console.log('uid', res)
+    })
   }
 }
 </script>

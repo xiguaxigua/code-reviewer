@@ -1,3 +1,5 @@
+/* eslint-disable no-undef*/
+// add wilddog csp
 chrome.webRequest.onHeadersReceived.addListener(function(details){
   details.responseHeaders.map(function (header) {
     if (header.name.toLowerCase() === 'content-security-policy') {
@@ -7,7 +9,6 @@ chrome.webRequest.onHeadersReceived.addListener(function(details){
         '*.wilddogio.com',
         'wss://*.wilddogio.com '
       ].join(' '))
-      console.log(header)
       return true
     }
   })

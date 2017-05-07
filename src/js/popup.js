@@ -19,12 +19,16 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
-      path: '/',
+      path: '/register/:type?',
       component: Register
     },
     {
       path: '/room',
       component: Room
+    },
+    {
+      path: '/',
+      component: Register
     }
   ]
 })

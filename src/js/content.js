@@ -1,11 +1,10 @@
 import * as wilddog from 'wilddog'
 import _throttle from 'lodash/throttle'
-import { getId, setStorage, addListener, clearStorage } from './utils'
+import { getId, setStorage, addListener, getStorage } from './utils'
 
 let data = null
-const id = getId()
-console.log(id)
-const idAbbr = id.slice(0, 5)
+const uid = getId()
+const idAbbr = uid.slice(0, 5)
 let ref = null
 let wildId = null
 let initedUser = false
@@ -59,26 +58,28 @@ function addPointer () {
 
 function initUser (data) {
   console.log(data)
-  if (!data.admin || data.admin.id === id) {
-    ref.child('admin').set({ id })
+  if (!data.admin || data.admin.id === uid) {
+    console.log('设置成员属性为admin')
+    ref.child('admin').set({ uid })
     setStorage('type', 'admin')
     addAdminEvent()
   } else {
-    ref.child('users').push({ id })
+    console.log('设置成员属性为user')
+    ref.child('users').push({ uid })
     setStorage('type', 'user')
     addPointer()
   }
 }
 
-function init (changes) {
-  ref = initWilddog(changes.id.newValue)
+function init (id) {
+  ref = initWilddog(id.newValue || id)
   ref.on('value', function (snapshot) {
     data = snapshot.val()
     if (!initedUser) {
       initedUser = true
-      initUser(data, id)
+      initUser(data, uid)
     }
-    if (data.admin.id !== id) changeHandler(data)
+    if (data.admin.id !== uid) changeHandler(data)
   })
 }
 
@@ -88,38 +89,24 @@ function changeHandler (data) {
     box.style.top = data.mouse.top + 'px'
   }
   if (data.page) {
-    console.log('set scroll top', data.page.top + 'px')
     document.documentElement.scrollTop = data.page.top
   }
 }
 
 function main () {
   setStorage('uid', idAbbr)
-  clearStorage(['id', 'type'])
+  getStorage('id').then(res => {
+    console.log('本地ID', res.id)
+    if (res && res.id) {
+      wildId = res.id
+      init(res.id)
+    }
+  })
   addListener(changes => {
     console.log('contentjs', changes)
     if (changes.id && wildId !== changes.id) {
       wildId = changes.id
-      init(changes)
+      init(changes.id)
     }
   })
 }
-
-/*
-ref.on("value", function(snapshot) {
-    console.log(snapshot.val());
-    var val = snapshot.val()
-    if (val.admin.id !== id) {
-      console.log('触发鼠标位置修改')
-      box.style.left = val.mouse.left + 'px'
-      box.style.top = val.mouse.top + 'px'
-
-      document.body.scrollTop = val.page && val.page.top
-    }
-});
-
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  console.log('监听修改')
-  console.log(changes, namespace)
-})
- */

@@ -16,26 +16,24 @@ export default {
 
   data () {
     return {
-      id: 'code-reviewer'
+      id: ''
     }
   },
 
   methods: {
     confirm () {
-      getStorage('id').then(res => {
-        console.log('id', res)
-      })
       setStorage('id', this.id)
+      this.$router.push({ path: '/room' })
     }
   },
 
   created () {
-    addListener((changes, namespace) => {
-      console.log('监听修改')
-      console.log(changes, namespace)
-    })
-    getStorage('uid').then(res => {
-      console.log('uid', res)
+    const type = this.$route.params.type
+    getStorage('id').then(res => {
+      if (res && res.id) {
+        this.id = res.id
+        if (type !== 'edit') this.$router.push({ path: '/room' })
+      }
     })
   }
 }

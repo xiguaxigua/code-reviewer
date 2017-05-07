@@ -57,8 +57,7 @@ function addPointer () {
 }
 
 function initUser (data) {
-  console.log(data)
-  if (!data.admin || data.admin.id === uid) {
+  if (!data.admin || data.admin.uid === uid) {
     console.log('设置成员属性为admin')
     ref.child('admin').set({ uid })
     setStorage('type', 'admin')
@@ -79,7 +78,7 @@ function init (id) {
       initedUser = true
       initUser(data, uid)
     }
-    if (data.admin.id !== uid) changeHandler(data)
+    if (data.admin.uid !== uid) changeHandler(data)
   })
 }
 
@@ -103,7 +102,6 @@ function main () {
     }
   })
   addListener(changes => {
-    console.log('contentjs', changes)
     if (changes.id && wildId !== changes.id) {
       wildId = changes.id
       init(changes.id)

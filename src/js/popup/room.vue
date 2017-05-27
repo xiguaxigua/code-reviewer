@@ -10,10 +10,10 @@
         off-text="关闭">
       </el-switch>
     </p>
-    <p v-else-if="type === 'admin' && pageState">
+    <p v-else-if="type === 'user' && pageState">
       是否同步当前页面：
       <el-switch
-        v-model="state"
+        v-model="onReview"
         on-text="开启"
         off-text="关闭">
       </el-switch>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { getStorage, setStorage } from '../utils'
+import { getStorage, setStorage, addListener } from '../utils'
 
 export default {
   name: 'room',
@@ -38,13 +38,18 @@ export default {
       uid: '',
       state: false,
       type: '',
-      pageState: false
+      pageState: false,
+      onReview: false
     }
   },
 
   watch: {
     state (v) {
       setStorage('state', v)
+    },
+
+    onReview (v) {
+      setStorage('onReview', v)
     }
   },
 
@@ -59,7 +64,11 @@ export default {
     getStorage('uid').then(res => { this.uid = res.uid })
     getStorage('type').then(res => { this.type = res.type })
     getStorage('state').then(res => { this.state = res.state })
+    getStorage('onReview').then(res => { this.onReview = res.onReview })
     getStorage('pageState').then(res => { this.pageState = res.pageState })
+    addListener(changes => {
+      if (changes.pageState) this.pageState = changes.pageState.newValue
+    })
   }
 }
 </script>

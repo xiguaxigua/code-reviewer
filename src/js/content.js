@@ -9,6 +9,7 @@ let ref = null
 let wildId = null
 let initedUser = false
 let box = null
+let onReview = false
 
 main()
 
@@ -46,7 +47,8 @@ function addPointer () {
     backgroundColor: 'red',
     position: 'absolute',
     left: '1px',
-    top: '1px'
+    top: '1px',
+    display: 'none'
   }
   Object.keys(style).forEach(key => {
     box.style[key] = style[key]
@@ -65,10 +67,23 @@ function initUser (data) {
     addAdminEvent()
   } else {
     console.log('设置成员属性为user')
-    ref.child('users').push({ uid })
+    if (data.users) {
+      const uids = Object.keys(data.users).map(key => data.users[key].uid)
+      if (!~uids.indexOf(uid)) ref.child('users').push({ uid })
+    } else {
+      ref.child('users').push({ uid })
+    }
     setStorage('type', 'user')
     addPointer()
+    judgeHref(data)
   }
+}
+
+function judgeHref (data) {
+  const pageState = data.info &&
+    data.info.href &&
+    window.location.href === data.info.href
+  setStorage('pageState', pageState)
 }
 
 function init (id) {
@@ -84,6 +99,7 @@ function init (id) {
 }
 
 function changeHandler (data) {
+  if (!onReview) return
   if (box && data.mouse) {
     box.style.left = data.mouse.left + 'px'
     box.style.top = data.mouse.top + 'px'
@@ -121,6 +137,12 @@ function main () {
       setStorage('jump', '0')
       if (data && data.info && data.info.href) {
         window.location.href = data.info.href
+      }
+    }
+    if (changes.onReview) {
+      onReview = changes.onReview.newValue
+      if (box) {
+        box.style.display = onReview ? 'block' : 'none'
       }
     }
   })

@@ -6,12 +6,14 @@ import Room from './popup/room'
 
 import {
   Input,
-  Button
+  Button,
+  Switch
 } from 'element-ui'
 
 [
   Input,
-  Button
+  Button,
+  Switch
 ].forEach(comp => { Vue.component(comp.name, comp) })
 
 Vue.use(Router)

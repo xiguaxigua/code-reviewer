@@ -60,6 +60,7 @@ function initUser (data) {
   if (!data.admin || data.admin.uid === uid) {
     console.log('设置成员属性为admin')
     ref.child('admin').set({ uid })
+    ref.child('info').update({ href: window.location.href })
     setStorage('type', 'admin')
     addAdminEvent()
   } else {
@@ -92,8 +93,15 @@ function changeHandler (data) {
   }
 }
 
+function toggleState (state) {
+  if (ref) {
+    ref.child('info').update({ state })
+  }
+}
+
 function main () {
   setStorage('uid', idAbbr)
+  setStorage('href', window.location.href)
   getStorage('id').then(res => {
     console.log('本地ID', res.id)
     if (res && res.id) {
@@ -105,6 +113,15 @@ function main () {
     if (changes.id && wildId !== changes.id) {
       wildId = changes.id
       init(changes.id)
+    }
+    if (changes.state) {
+      toggleState(changes.state.newValue)
+    }
+    if (changes.jump) {
+      setStorage('jump', '0')
+      if (data && data.info && data.info.href) {
+        window.location.href = data.info.href
+      }
     }
   })
 }

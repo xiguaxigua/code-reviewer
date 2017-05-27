@@ -1,15 +1,33 @@
 <template>
   <div class="page-room">
-    <p>您当前的野狗ID为:</p>
-    <p class="sub">{{ id }}</p>
-    <p>您的用户ID为:</p>
-    <p class="sub">{{ uid }}</p>
+    <p>野狗ID: {{ id }}</p>
+    <p>用户ID: {{ uid }}</p>
+    <p v-if="type === 'admin'">
+      是否review当前页面：
+      <el-switch
+        v-model="state"
+        on-text="开启"
+        off-text="关闭">
+      </el-switch>
+    </p>
+    <p v-else-if="type === 'admin' && pageState">
+      是否同步当前页面：
+      <el-switch
+        v-model="state"
+        on-text="开启"
+        off-text="关闭">
+      </el-switch>
+    </p>
+    <p v-else>
+      进入正在review的页面
+      <el-button @click="jump" size="small">跳转</el-button>
+    </p>
     <router-link class="router" to="/register/edit">修改野狗ID</router-link>
   </div>
 </template>
 
 <script>
-import { getStorage } from '../utils'
+import { getStorage, setStorage } from '../utils'
 
 export default {
   name: 'room',
@@ -17,13 +35,31 @@ export default {
   data () {
     return {
       id: '',
-      uid: ''
+      uid: '',
+      state: false,
+      type: '',
+      pageState: false
+    }
+  },
+
+  watch: {
+    state (v) {
+      setStorage('state', v)
+    }
+  },
+
+  methods: {
+    jump () {
+      setStorage('jump', '1')
     }
   },
 
   created () {
     getStorage('id').then(res => { this.id = res.id })
     getStorage('uid').then(res => { this.uid = res.uid })
+    getStorage('type').then(res => { this.type = res.type })
+    getStorage('state').then(res => { this.state = res.state })
+    getStorage('pageState').then(res => { this.pageState = res.pageState })
   }
 }
 </script>

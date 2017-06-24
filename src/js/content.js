@@ -10,6 +10,7 @@ let wildId = null
 let initedUser = false
 let box = null
 let onReview = false
+let adminState = false
 
 main()
 
@@ -26,6 +27,7 @@ function addAdminEvent () {
 }
 
 function sendPosigion (event) {
+  if (!adminState) return
   ref.child('mouse').set({
     left: event.pageX,
     top: event.pageY
@@ -33,6 +35,7 @@ function sendPosigion (event) {
 }
 
 function sendScroll () {
+  if (!adminState) return
   ref.child('page').set({
     top: document.body.scrollTop
   })
@@ -95,11 +98,12 @@ function init (id) {
       initUser(data, uid)
     }
     if (data.admin.uid !== uid) changeHandler(data)
+    if (data.info) adminState = data.info.state
   })
 }
 
 function changeHandler (data) {
-  if (!onReview) return
+  if (!onReview || !adminState) return
   if (box && data.mouse) {
     box.style.left = data.mouse.left + 'px'
     box.style.top = data.mouse.top + 'px'

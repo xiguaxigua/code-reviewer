@@ -11,6 +11,7 @@ let initedUser = false
 let box = null
 let onReview = false
 let adminState = false
+let boxDisplay = null
 
 main()
 
@@ -51,7 +52,7 @@ function addPointer () {
     position: 'absolute',
     left: '1px',
     top: '1px',
-    display: 'none'
+    display: boxDisplay || 'none'
   }
   Object.keys(style).forEach(key => {
     box.style[key] = style[key]
@@ -63,13 +64,11 @@ function addPointer () {
 
 function initUser (data) {
   if (!data.admin || data.admin.uid === uid) {
-    console.log('设置成员属性为admin')
     ref.child('admin').set({ uid })
     ref.child('info').update({ href: window.location.href })
     setStorage('type', 'admin')
     addAdminEvent()
   } else {
-    console.log('设置成员属性为user')
     if (data.users) {
       const uids = Object.keys(data.users).map(key => data.users[key].uid)
       if (!~uids.indexOf(uid)) ref.child('users').push({ uid })
@@ -123,12 +122,16 @@ function main () {
   setStorage('uid', idAbbr)
   setStorage('href', window.location.href)
   getStorage('id').then(res => {
-    console.log('本地ID', res.id)
     if (res && res.id) {
       wildId = res.id
       init(res.id)
     }
   })
+  getStorage('onReview').then(res => {
+    onReview = res.onReview
+    boxDisplay = onReview ? 'block' : 'none'
+  })
+  getStorage('adminState').then(res => { adminState = res.adminState })
   addListener(changes => {
     if (changes.id && wildId !== changes.id) {
       wildId = changes.id

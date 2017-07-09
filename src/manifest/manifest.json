@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "code-reviewer",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "chrome code review helper",
   "icons": {
     "16": "icon/icon16.png",

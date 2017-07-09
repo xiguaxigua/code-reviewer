@@ -23,6 +23,12 @@
       <el-button @click="jump" size="small">跳转</el-button>
     </p>
     <router-link class="router" to="/register/edit">修改野狗ID</router-link>
+    <el-button
+      v-if="type !== 'admin'"
+      type="text"
+      @click="toggleAdmin">
+      切换自己为管理员
+    </el-button>
   </div>
 </template>
 
@@ -56,6 +62,10 @@ export default {
   methods: {
     jump () {
       setStorage('jump', '1')
+    },
+
+    toggleAdmin () {
+      setStorage('changeAdmin', true)
     }
   },
 

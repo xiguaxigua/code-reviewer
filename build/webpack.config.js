@@ -1,10 +1,6 @@
 var path = require('path')
-var webpack = require('webpack')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
-
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
-}
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -13,7 +9,7 @@ module.exports = {
     background: './src/js/background.js'
   },
   output: {
-    path: resolve('./dist'),
+    path: path.join(__dirname, '..', './dist'),
     filename: 'js/[name].js'
   },
   resolve: {
@@ -75,6 +71,12 @@ module.exports = {
         from: 'src/icon/',
         to: 'icon'
       }
-    ])
+    ]),
+    new HtmlWebpackPlugin({
+      filename: 'popup.html',
+      template: 'src/html/popup.html',
+      inject: true,
+      chunks: ['popup']
+    })
   ]
 }
